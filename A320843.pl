@@ -26,6 +26,8 @@ say "$_ ", count_cute($_) for $from .. $to;
 
 use integer;
 
+use PDL;
+
 sub count_cute ($n) {
     # Build the adjacency matrix A for a "cute list" of size N.
     my @a;
@@ -35,7 +37,10 @@ sub count_cute ($n) {
             $a[$i][$k] = $v;
         }
     }
-    my @s = sort {grep($_, @$a) <=> grep($_, @$b)} @a;
+    my @s = sort {
+        grep($_, @$a) <=> grep($_, @$b)
+        || join('', @$a) cmp join('', @$b)
+    } @a;
 
     # Find the number of cute lists.
     permanent(\@s);
