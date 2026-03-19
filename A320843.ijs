@@ -1,9 +1,9 @@
 #!/usr/local/bin/jconsole
 
 0 : 0
-The not-so-well-known "Johnson-Gentleman-minor-tree" method.
+The not-so-well-known "Johnson-Gentleman tree minor" algorithm 
 
-Probably the fastest approach for permanents, but very memory-consuming.
+A fast approach for permanents, but very memory-consuming.
 
 For not-too-large matrices (maybe N<=25 rows, depending on the available
 RAM), this method is a few times faster than the Ryser method.
@@ -15,7 +15,7 @@ A k-minor is build from the first k rows and k distinct columns.
 It is identified by a pair of a selector and a value.
 The selector is the subset indicator of the columns, i.e.
 bit m is 1 if column m is part of the minor.
-The value is the corresponding permanent/determinant of the minor.
+The value is the corresponding permanent of the minor.
 The list of all k-minors is transformed into the list of all k+1 minors.
 Starting with the empty minor, after N steps the procedure ends with
 the single minor that represents the whole matrix.

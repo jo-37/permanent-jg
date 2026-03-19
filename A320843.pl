@@ -54,8 +54,8 @@ sub permanent ($a) {
     my $last = $#$a;
     my $sel;
 
-    # Nodes are key-value pairs where the keys are integers with bits
-    # set for the selected columna forming a minor matrix and the
+    # Nodes are key-value pairs, where the keys are integers with bits
+    # set for the selected columns forming a minor matrix and the
     # corresponding sub-permanent as values.
 
     # The first node is the empty minor
@@ -64,9 +64,8 @@ sub permanent ($a) {
     # Loop over all rows
     for my $i (0 .. $last) {
         my $next;
-        # Loop over all minors of the previous node. These have a size
-        # of $i x $i
         my $row = $a->[$i];
+        # Loop over all minors of the previous node.
         for my $minor (keys %$node) {
             # Loop over all columns.  Process only nonzero elements
             # and columns that are not part of the current minor.
