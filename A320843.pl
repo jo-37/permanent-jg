@@ -26,7 +26,18 @@ say "$_ ", count_cute($_) for $from .. $to;
 
 use integer;
 
-use PDL;
+# transpose matrix
+sub tm {
+    map {
+        my $r = $_;
+        [map $_[$_][$r], 0 .. $#_]
+    } 0 .. $#_;
+}
+
+# sort lexical
+sub slm {
+    sort {join('', @$a) cmp join('', @$b)} @_;
+}
 
 sub count_cute ($n) {
     # Build the adjacency matrix A for a "cute list" of size N.
@@ -37,10 +48,7 @@ sub count_cute ($n) {
             $a[$i][$k] = $v;
         }
     }
-    my @s = sort {
-        grep($_, @$a) <=> grep($_, @$b)
-        || join('', @$a) cmp join('', @$b)
-    } @a;
+    my @s = slm tm slm @a;
 
     # Find the number of cute lists.
     permanent(\@s);
@@ -51,8 +59,7 @@ sub count_cute ($n) {
 # minors appearing in recursive approaches.  It does not split the task
 # of calculating a determinant/permanent into smaller tasks but instead
 # builds the whole result by extending from single elements.  This takes
-# a lot of memory for larger matrices.  Restricting to matrices having
-# only zeroes and ones as elements.
+# a lot of memory for larger matrices.
 #
 sub permanent ($a) {
     my $node;

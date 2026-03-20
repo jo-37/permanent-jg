@@ -22,12 +22,7 @@ the single minor that represents the whole matrix.
 
 Taking the P x 2 array of minor selectors and values as input.
 
-Two significant tweaks:
-- remove minors having a zero value
-- sort the matrix rows by ascending number of non-zeroes
-
-These can speed up the calculation by magnitudes on sparse matrices and can
-save memory. The (negative) impact on dense matrices is low.
+Remove minors having a zero value, but always keep at least one minor
 )
 
 permanent_jg =: 3 : 0
@@ -47,11 +42,11 @@ addrow =: getrow ([ ([: compress nextsels collectminors nextvals) ] ; [ compleme
 permpow =. ]`(#@])`[    NB. in power of verb: put the right arg (the matrix) to the left,
                         NB. use the number of rows as the power and put the left arg to the right
 perm =. ((<0 1) { (1 2 $ 0 1)"_ addrow^:permpow ]) f.    NB. run N steps and return the value
-perm@(] /: ] ;~"(1 0) +/@(0&~:)) y  NB. sort matrix rows ascending by number of non-zeroes and calculate
-                                    NB. its permanent
+perm y                  NB. calculate the permanent
 )
 
 matrix =: (0&=@|~&>: +. 0&=@|&>:)"0/~@i.  NB. build a matrix
+precond =. /:~@|:@(/:~)  NB. preconditioning: sort lexicagraphically, transpose and sort again
 
 3 : 0 (2}. ARGV)
 from =. ". > {. y
@@ -68,7 +63,11 @@ else.
    exit''
 end.
 
-([: echo ] , permanent_jg@matrix)"0 from ([ + [: i. >:@-~) to
+NB. For the matrices from A320843 it is crucial to re-arrange them in a form that resembles a lower
+NB. triangle.
+NB. This can be achieved by lexicographical sorting of columns and rows.
+
+([: echo ] , permanent_jg@precond@matrix)"0 from ([ + [: i. >:@-~) to
 
 )
 
