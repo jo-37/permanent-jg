@@ -38,15 +38,12 @@ collectminors =. (([ , [: +/ ])/..)&,  NB. flatten the arrays of new values and 
                                        NB. collect by new minor selectors and sum over the new values
 compress =. [: (1 2 $ 0)"_^:(0&=@#) 0&~:@values # ] f. NB. remove zero-valued minors,
                                                        NB. but keep at least one entity
-addrow =: getrow ([ ([: compress nextsels collectminors nextvals) ] ; [ complements selectors) ] f. NB. add one row
+addrow =. getrow ([ ([: compress nextsels collectminors nextvals) ] ; [ complements selectors) ] f. NB. add one row
 permpow =. ]`(#@])`[    NB. in power of verb: put the right arg (the matrix) to the left,
                         NB. use the number of rows as the power and put the left arg to the right
 perm =. ((<0 1) { (1 2 $ 0 1)"_ addrow^:permpow ]) f.    NB. run N steps and return the value
 perm y                  NB. calculate the permanent
 )
-
-matrix =: (0&=@|~&>: +. 0&=@|&>:)"0/~@i.  NB. build a matrix
-precond =. /:~@|:@(/:~)  NB. preconditioning: sort lexicagraphically, transpose and sort again
 
 3 : 0 (2}. ARGV)
 from =. ". > {. y
@@ -63,10 +60,12 @@ else.
    exit''
 end.
 
+matrix =. (0&=@|~&>: +. 0&=@|&>:)"0/~@i.  NB. build a matrix
+precond =. /:~@|:@(/:~)  NB. preconditioning: sort lexicographically, transpose and sort again
+
 NB. For the matrices from A320843 it is crucial to re-arrange them in a form that resembles a lower
 NB. triangle.
 NB. This can be achieved by lexicographical sorting of columns and rows.
-
 ([: echo ] , permanent_jg@precond@matrix)"0 from ([ + [: i. >:@-~) to
 
 )
