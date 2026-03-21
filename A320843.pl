@@ -34,9 +34,14 @@ sub tm {
     } 0 .. $#_;
 }
 
+# nonzeroes as binary string
+sub binstr ($in) {
+  join '', map 0+!!$_, @$in;
+}
+
 # sort lexical
 sub slm {
-    sort {join('', @$a) cmp join('', @$b)} @_;
+    sort {binstr($a) cmp binstr($b)} @_;
 }
 
 sub count_cute ($n) {
@@ -48,6 +53,7 @@ sub count_cute ($n) {
             $a[$i][$k] = $v;
         }
     }
+
     my @s = slm tm slm @a;
 
     # Find the number of cute lists.
